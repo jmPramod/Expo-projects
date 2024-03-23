@@ -12,7 +12,7 @@ const WelcomeScreen = ({ navigation }) => {
 
                     <Text style={styles.textStyle}>Deliciaus Recipe!!</Text>
                     <Text style={styles.textStyleSecond} >Cook Like a Chef</Text>
-                    <TouchableOpacity style={styles.touchBg} onPress={() => navigation.navigate("RecipeList")}>
+                    <TouchableOpacity style={styles.touchBg} onPress={() => navigation.navigate("Login")}>
                         <Text style={styles.textButton}>Lets go</Text>
                     </TouchableOpacity>
                 </View>

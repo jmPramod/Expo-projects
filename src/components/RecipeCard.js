@@ -11,7 +11,7 @@ const RecipeCard = () => {
     const recipeList = [{
         id: 0,
         name: "chapathi",
-        Image: require("../../assets/images/tuna.png"),
+        Image: require("../../assets/images/chpathi.png"),
         rating: 1.2,
         ingredient: ["water", "oil", "salt"],
         time: "30 mins",
@@ -23,7 +23,7 @@ const RecipeCard = () => {
     }, {
         id: 1,
         name: "chapathi1",
-        Image: require("../../assets/images/chicken.png"),
+        Image: require("../../assets/images/poha.png"),
         rating: 4,
         ingredient: ["water", "oil", "salt"],
         time: "30 mins",
@@ -35,7 +35,7 @@ const RecipeCard = () => {
     }, {
         id: 3,
         name: "chapathi",
-        Image: require("../../assets/images/cupcakes.png"),
+        Image: require("../../assets/images/poori.png"),
         rating: 1.2,
         ingredient: ["water", "oil", "salt"],
         time: "30 mins",
@@ -131,11 +131,11 @@ const RecipeCard = () => {
     }]
     const renderStar = (item) => {
         if (0 < item.rating < 3) {
-            return <MaterialIcons name="star-half" size={24} color="red" />
+            return <MaterialIcons style={{ flexWrap: "wrap", width: "100%", height: 40, paddingTop: 100, borderWidth: 2 }} name="star-half" size={24} color="red" />
         }
         else {
             console.log(item.rating);
-            return <MaterialIcons name="star-rate" size={24} color="red" />
+            return <MaterialIcons name="star-rate" size={24} color="red" style={{ flexWrap: "wrap", width: "100%", height: 40 }} />
         }
     }
     return (
@@ -152,7 +152,7 @@ const RecipeCard = () => {
                     <Image style={styles.imageStyle} source={item.Image} />
                     <Text>{item.name}
                     </Text>
-                    <Text>
+                    <Text >
                         {item.time} | {item.rating} | {renderStar(item)}</Text>
 
                 </Pressable>}

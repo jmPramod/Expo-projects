@@ -5,7 +5,6 @@ import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 const RecipeDetailScreen = ({ route, navigation }) => {
     const { item } = route.params
-    // const navigation = useNavigation()
     const [heartIcon, setHeartIcon] = useState("hearto")
 
     const changeIcon = () => {
@@ -78,7 +77,7 @@ const RecipeDetailScreen = ({ route, navigation }) => {
 
 const styles = StyleSheet.create({
     outerContainer: { flex: 1, backgroundColor: "#6f4e37", position: "relative" },
-    innerContainer: { flex: 1, backgroundColor: "white", marginTop: 240, borderTopLeftRadius: 56, borderTopRightRadius: 56, padding: 20 },
+    innerContainer: { flex: 1, backgroundColor: "white", marginTop: 240, borderTopLeftRadius: 56, borderTopRightRadius: 56, padding: 20, height: "100%" },
     thirdContainer: {
         width: 300, height: 300, position: "absolute", top: -200, left: "8%", right: "5%", backgroundColor: "none"
     },
