@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Text, SafeAreaView, Image, ImageBackground, Dimensions, TextInput, Button, ScrollView } from 'react-native';
+import { View, StyleSheet, Text, SafeAreaView, Image, ImageBackground, Dimensions, TextInput, Button, ScrollView, Alert } from 'react-native';
 import { Colors } from '../static/Color';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -22,12 +22,38 @@ const Login = () => {
 
     });
     const handleLoginSubmit = async (values) => {
-        console.log(values);
-        const response = await axios.post("https://nodejs-api-eta-mocha.vercel.app/auth/login", values)
-        // dispatch(userAction.setUser(values))
 
-        dispatch(userAction.setUser(response.data))
-            ;
+        try {
+
+            const response1 = await fetch('https://nodejs-api-eta-mocha.vercel.app/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(values),
+            });
+            const response = await axios.post("https://nodejs-api-eta-mocha.vercel.app/auth/login", values)
+
+            console.log("response.data", response.data);
+            dispatch(userAction.setUser(response.data))
+        }
+        catch (err) {
+            if (err.response.data) {
+                Alert.alert(
+                    'Login Error',
+                    `${err.response.data.message}`,
+                    [
+                        {
+                            text: 'OK',
+                        }
+                    ],
+                    { cancelable: false }
+                )
+            }
+            console.log("err,err", typeof err.response, err.response.data);
+        }
+        dispatch(userAction.setUser(values))
+
     }
     const registerInitialValues = {
         firstName: '',
@@ -50,9 +76,7 @@ const Login = () => {
         console.log(values);
     }
     const forgotPasswordInitialValues = {
-
         email: "",
-
     };
     const validationForgotPasswordSchema = Yup.object({
         email: Yup.string().email('Invalid email address').required('Reset Email is Required'),
@@ -62,10 +86,6 @@ const Login = () => {
         console.log(values);
     }
 
-    useEffect(() => {
-        console.log(process.env.EXPO_PUBLIC_Server_Base_URL, process.env.EXPO_PUBLIC_API_URL);
-        console.log("products123", products)
-    }, [products])
     return (
 
         <SafeAreaView>
