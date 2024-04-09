@@ -9,7 +9,7 @@ import { userAction } from '../redux/slice/loginSlice';
 const Login = () => {
     const [screen, setScreen] = useState("Login")
     const dispatch = useDispatch()
-    const products = useSelector((state) => state.userList.user)
+    const products = useSelector((state) => state.userList)
 
     const { height } = Dimensions.get("window")
     const loginInitialValues = {
@@ -24,35 +24,23 @@ const Login = () => {
     const handleLoginSubmit = async (values) => {
 
         try {
-
-            const response1 = await fetch('https://nodejs-api-eta-mocha.vercel.app/auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(values),
-            });
+            dispatch(userAction.setLoading(true))
             const response = await axios.post("https://nodejs-api-eta-mocha.vercel.app/auth/login", values)
-
-            console.log("response.data", response.data);
-            dispatch(userAction.setUser(response.data))
+            dispatch(userAction.setUser(response.data.data))
+            console.log(response.data);
         }
         catch (err) {
             if (err.response.data) {
                 Alert.alert(
                     'Login Error',
                     `${err.response.data.message}`,
-                    [
-                        {
-                            text: 'OK',
-                        }
-                    ],
+                    [{ text: 'OK', }],
                     { cancelable: false }
                 )
             }
-            console.log("err,err", typeof err.response, err.response.data);
+            dispatch(userAction.setLoading(false))
+
         }
-        dispatch(userAction.setUser(values))
 
     }
     const registerInitialValues = {
@@ -85,7 +73,7 @@ const Login = () => {
     const handleForgotPasswordSubmit = (values) => {
         console.log(values);
     }
-
+    useEffect(() => { console.log("products", products); }, [products])
     return (
 
         <SafeAreaView>
