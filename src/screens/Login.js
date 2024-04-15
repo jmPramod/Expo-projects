@@ -6,6 +6,10 @@ import * as Yup from 'yup';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { userAction } from '../redux/slice/loginSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+// import { config } from 'dotenv';
+// config();
 const Login = () => {
     const [screen, setScreen] = useState("Login")
     const dispatch = useDispatch()
@@ -18,7 +22,7 @@ const Login = () => {
     };
     const validationLoginSchema = Yup.object({
         email: Yup.string().email('Invalid email address').required('Email is Required'),
-        password: Yup.string().min(6, 'Password must be at least 6 characters').required('Required'),
+        password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is Required'),
 
     });
     const handleLoginSubmit = async (values) => {
@@ -73,7 +77,17 @@ const Login = () => {
     const handleForgotPasswordSubmit = (values) => {
         console.log(values);
     }
-    useEffect(() => { console.log("products", products); }, [products])
+    useEffect(() => {
+        console.log("products", products);
+        let a = async () => {
+            const value = await AsyncStorage.getItem("user");
+
+            console.log("value", value);
+        }
+
+        a()
+
+    }, [products])
     return (
 
         <SafeAreaView>

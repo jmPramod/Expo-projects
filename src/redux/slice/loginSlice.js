@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const userDetailsSlice = createSlice({
     name: "userAuth",
@@ -11,6 +12,11 @@ const userDetailsSlice = createSlice({
         setUser(state, action) {
             state.user = action.payload;
             state.loading = false;
+            // try {
+            //     await AsyncStorage.setItem("user", JSON.stringify(action.payload));
+            // } catch (e) {
+            //     console.error('Failed to save data', e);
+            // }
         },
         setLoading(state, action) {
             state.loading = action.payload;
