@@ -78,6 +78,7 @@ const Login = () => {
         console.log(values);
     }
     useEffect(() => {
+
         console.log("products", products);
         let a = async () => {
             const value = await AsyncStorage.getItem("user");

@@ -7,22 +7,24 @@ import WelcomeScreen from './../screens/WelcomeScreen';
 import RecipeList from '../screens/RecipeList';
 import RecipeDetailScreen from '../screens/RecipeDetailScreen';
 import Login from '../screens/Login';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { loadUserFromAsyncStorage } from '../redux/slice/loginSlice';
 
 const Stack = createNativeStackNavigator();
 
 const AppNavigation = () => {
-    const [auth, setAuth] = useState(null)
+    const dispatch = useDispatch();
+    const user = useSelector((state) => state.userList?.user);
+    const isAuthenticated = user !== null && typeof user !== 'undefined';
+
+    useSelector((state) => console.log(state?.usersList?.user))
     const loading = useSelector((state) => state?.usersList?.loading)
     useEffect(() => {
-        const fetchUser = async () => {
-            const value = await AsyncStorage.getItem("user");
-            setAuth(value)
-        }
-        fetchUser()
-    }, [])
-    // const user = useSelector((state) => state?.usersList?.user);
-
+        dispatch(loadUserFromAsyncStorage());
+    }, [dispatch]);
+    useEffect(() => {
+        console.log("isAuthenticated", isAuthenticated);
+    }, [isAuthenticated])
     if (loading) {
         return <View style={[styles.container, styles.horizontal]}>
             <ActivityIndicator size="large" />
@@ -32,7 +34,7 @@ const AppNavigation = () => {
         return (<NavigationContainer>
 
             {
-                auth ?
+                isAuthenticated ?
                     <Stack.Navigator initialRouteName="WelcomeScreen">
                         <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} options={{ headerShown: false, headerRight: () => <Button onPress={console.log("logout")} title="Logout" ></Button> }} />
                         <Stack.Screen name="RecipeList" component={RecipeList} options={{ headerShown: false }} />

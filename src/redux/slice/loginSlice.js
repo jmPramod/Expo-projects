@@ -12,11 +12,6 @@ const userDetailsSlice = createSlice({
         setUser(state, action) {
             state.user = action.payload;
             state.loading = false;
-            // try {
-            //     await AsyncStorage.setItem("user", JSON.stringify(action.payload));
-            // } catch (e) {
-            //     console.error('Failed to save data', e);
-            // }
         },
         setLoading(state, action) {
             state.loading = action.payload;
@@ -24,6 +19,10 @@ const userDetailsSlice = createSlice({
         setError(state, action) {
             state.error = action.payload;
             state.loading = false;
+        }, logout(state) {
+            state.user = null;
+            state.loading = false;
+            state.error = null;
         }
     }
 })
@@ -37,15 +36,29 @@ const loadUserFromAsyncStorage = () => async (dispatch) => {
     try {
         // Check if user is present in AsyncStorage
         const userFromStorage = await AsyncStorage.getItem('user');
-
+        console.log("userFromStorage", userFromStorage);
         if (userFromStorage) {
             dispatch(userDetailsSlice.actions.setUser(JSON.parse(userFromStorage)));
-        } else {
-            // If user is not present in AsyncStorage, handle accordingly
-            // For example, you might want to set default values or perform some other action
         }
     } catch (error) {
         dispatch(userDetailsSlice.actions.setError(error.message));
     }
 };
+
+export const performLogout = () => async (dispatch) => {
+    console.log("2");
+    dispatch(userDetailsSlice.actions.setLoading(true));
+    console.log("3");
+    try {
+        // Clear AsyncStorage
+        await AsyncStorage.removeItem('user');
+        const value = await AsyncStorage.getItem("user");
+
+        console.log("4", value);
+        // Dispatch logout action to update Redux store
+        dispatch(userDetailsSlice.actions.logout());
+    } catch (error) {
+        console.error('Error clearing AsyncStorage:', error);
+    }
+}
 export { userDetailsSlice, userAction, loadUserFromAsyncStorage }

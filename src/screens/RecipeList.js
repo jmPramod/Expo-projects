@@ -1,11 +1,18 @@
-import { View, Text, ScrollView, StyleSheet } from 'react-native'
+import { View, Text, ScrollView, StyleSheet, Button } from 'react-native'
 import React from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import CategoryFilter from '../components/CategoryFilter'
 import RecipeCard from '../components/RecipeCard'
+import { useDispatch } from 'react-redux'
+import { performLogout, userAction } from '../redux/slice/loginSlice'
 
 const RecipeList = () => {
+    const dispatch = useDispatch();
+    const handleLogout = () => {
+        console.log("1");
+        dispatch(performLogout());
+    };
     return (
         // <ScrollView>
 
@@ -19,6 +26,10 @@ const RecipeList = () => {
                 <Text style={styles.categoryTitle}>Category</Text>
                 <CategoryFilter />
             </View>
+            {/* <Button
+                onPress={handleLogout}
+                title="Logout"
+            /> */}
             {/* render Cards */}
             <RecipeCard />
             {/* rendering footer */}
