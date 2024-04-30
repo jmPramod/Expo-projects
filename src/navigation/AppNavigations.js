@@ -8,23 +8,40 @@ import RecipeList from '../screens/RecipeList';
 import RecipeDetailScreen from '../screens/RecipeDetailScreen';
 import Login from '../screens/Login';
 import { useDispatch, useSelector } from 'react-redux';
-import { loadUserFromAsyncStorage } from '../redux/slice/loginSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { userAction } from '../redux/slice/loginSlice';
 
 const Stack = createNativeStackNavigator();
 
 const AppNavigation = () => {
+
+    const handleLogout = async () => {
+        dispatch(userAction.logout())
+        await AsyncStorage.removeItem("user");
+
+    };
     const dispatch = useDispatch();
     const user = useSelector((state) => state.userList?.user);
-    const isAuthenticated = user !== null && typeof user !== 'undefined';
+    const isAuthenticated = user !== null && typeof user !== 'undefined' && Object.keys(user).length > 0
 
-    useSelector((state) => console.log(state?.usersList?.user))
     const loading = useSelector((state) => state?.usersList?.loading)
+
     useEffect(() => {
-        dispatch(loadUserFromAsyncStorage());
-    }, [dispatch]);
-    useEffect(() => {
-        console.log("isAuthenticated", isAuthenticated);
-    }, [isAuthenticated])
+        async function fetchUser() {
+            if (!user || Object.keys(user).length === 0) {
+
+                const value = await AsyncStorage.getItem("user");
+
+                if (value) {
+                    value && dispatch(userAction.setUser(JSON.parse(value)))
+
+                }
+            }
+
+        }
+
+        fetchUser()
+    }, [user])
     if (loading) {
         return <View style={[styles.container, styles.horizontal]}>
             <ActivityIndicator size="large" />
@@ -36,8 +53,10 @@ const AppNavigation = () => {
             {
                 isAuthenticated ?
                     <Stack.Navigator initialRouteName="WelcomeScreen">
-                        <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} options={{ headerShown: false, headerRight: () => <Button onPress={console.log("logout")} title="Logout" ></Button> }} />
-                        <Stack.Screen name="RecipeList" component={RecipeList} options={{ headerShown: false }} />
+                        <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} options={{ headerShown: false, headerRight: () => <Button onPress={handleLogout} title="Logout" ></Button> }} />
+                        <Stack.Screen name="RecipeList" component={RecipeList} options={{
+                            headerShown: true, headerRight: () => <Button onPress={handleLogout} title="Logout" >logout</Button>
+                        }} />
                         <Stack.Screen name="RecipeDetailScreen" component={RecipeDetailScreen} options={{ headerShown: false }} />
                     </Stack.Navigator> :
                     <Stack.Navigator initialRouteName="Login">

@@ -4,22 +4,23 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import CategoryFilter from '../components/CategoryFilter'
 import RecipeCard from '../components/RecipeCard'
-import { useDispatch } from 'react-redux'
-import { performLogout, userAction } from '../redux/slice/loginSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { userAction } from '../redux/slice/loginSlice'
 
 const RecipeList = () => {
     const dispatch = useDispatch();
+
+    const user = useSelector((state) => state?.userList?.user)
+
     const handleLogout = () => {
-        console.log("1");
-        dispatch(performLogout());
-    };
-    return (
+        dispatch(userAction.setUser(response?.data?.data))
+    }; return (
         // <ScrollView>
 
 
         <View style={{ width: "90%", marginRight: "auto", marginLeft: "auto" }} >
             {/* rendering head */}
-            <Header headerText={"Hi Pj"} headerIcon={"bell-o"} />
+            <Header headerText={`Hi ${user?.firstName}`} headerIcon={"bell-o"} />
             {/* rendering category */}
 
             <View>

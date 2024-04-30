@@ -30,8 +30,10 @@ const Login = () => {
         try {
             dispatch(userAction.setLoading(true))
             const response = await axios.post("https://nodejs-api-eta-mocha.vercel.app/auth/login", values)
-            dispatch(userAction.setUser(response.data.data))
-            console.log(response.data);
+            if (response?.data) {
+                dispatch(userAction.setUser(response?.data?.data))
+                await AsyncStorage.setItem("user", JSON.stringify(response?.data?.data));
+            }
         }
         catch (err) {
             if (err.response.data) {
@@ -77,18 +79,7 @@ const Login = () => {
     const handleForgotPasswordSubmit = (values) => {
         console.log(values);
     }
-    useEffect(() => {
 
-        console.log("products", products);
-        let a = async () => {
-            const value = await AsyncStorage.getItem("user");
-
-            console.log("value", value);
-        }
-
-        a()
-
-    }, [products])
     return (
 
         <SafeAreaView>
@@ -152,7 +143,7 @@ const Login = () => {
                                 {touched.password && errors.password && <Text style={styles.error}>{errors.password}</Text>}
 
                                 <Text style={{ textDecorationLine: 'underline', marginBottom: 30, marginTop: 10 }} onPress={() => setScreen("ForgotPassword")}>Forgot Password ? </Text>
-                                <Button title='Login' style={{ borderRadius: 50 }} onPress={handleSubmit}></Button>
+                                <Button title={products.loading ? "loading...." : "Login"} disabled={products.loading} style={{ borderRadius: 50 }} onPress={handleSubmit}></Button>
 
                             </View>
                             )}

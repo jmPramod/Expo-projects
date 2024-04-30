@@ -134,7 +134,6 @@ const RecipeCard = () => {
             return <MaterialIcons style={{ flexWrap: "wrap", width: "100%", height: 40, paddingTop: 100, borderWidth: 2 }} name="star-half" size={24} color="red" />
         }
         else {
-            console.log(item.rating);
             return <MaterialIcons name="star-rate" size={24} color="red" style={{ flexWrap: "wrap", width: "100%", height: 40 }} />
         }
     }
